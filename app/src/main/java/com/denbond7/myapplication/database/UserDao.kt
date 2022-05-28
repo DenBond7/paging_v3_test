@@ -23,7 +23,7 @@ interface UserDao {
     @Query("DELETE FROM user")
     suspend fun deleteAll(): Int
 
-    @Query("SELECT * FROM user")
+    @Query("SELECT * FROM user ORDER BY uid ASC")
     fun getUsers(): PagingSource<Int, User>
 
     @Query("SELECT COUNT(*) FROM user")

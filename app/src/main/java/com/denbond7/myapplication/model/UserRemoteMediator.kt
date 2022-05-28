@@ -5,6 +5,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import androidx.room.withTransaction
 import com.denbond7.myapplication.database.AppDatabase
 import com.denbond7.myapplication.database.User
 import kotlinx.coroutines.delay
@@ -27,7 +28,6 @@ class UserRemoteMediator(
     }
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, User>): MediatorResult {
-        Log.d("DDDD", "$loadType")
         try {
             val userDao = roomDatabase.userDao()
             return when (loadType) {

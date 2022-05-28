@@ -31,7 +31,8 @@ class UserAdapter : PagingDataAdapter<User, UserAdapter.UserViewHolder>(UserComp
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding: ItemUserBinding = ItemUserBinding.bind(itemView)
         fun bind(user: User?) {
-            binding.textViewId.text = user?.uid.toString()
+            binding.textViewId.text =
+                itemView.context.getString(R.string.uid_template, user?.uid ?: 0)
             binding.textViewFirstName.text = user?.firstName
             binding.textViewLastName.text = user?.lastName
         }

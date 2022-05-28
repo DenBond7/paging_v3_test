@@ -1,14 +1,15 @@
 package com.denbond7.myapplication.ui.main
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.denbond7.myapplication.R
+import com.denbond7.myapplication.database.AppDatabase
 import com.denbond7.myapplication.databinding.FragmentMainBinding
 import com.denbond7.myapplication.ui.adapters.ProgressLoadStateAdapter
 import com.denbond7.myapplication.ui.adapters.UserAdapter
@@ -20,6 +21,11 @@ class MainFragment : Fragment() {
     private val mainViewModel: MainViewModel by viewModels()
     private val pagingAdapter = UserAdapter()
     private var binding: FragmentMainBinding? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +40,26 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         setupMainViewModel()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuItemReset -> {
+                lifecycleScope.launch {
+                    val roomDatabase = AppDatabase.getDatabase(requireContext())
+                    roomDatabase.userDao().deleteAll()
+                    Toast.makeText(requireContext(), R.string.reload, Toast.LENGTH_SHORT).show()
+                }
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initViews() {
@@ -55,7 +81,12 @@ class MainFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             pagingAdapter.loadStateFlow.collectLatest { loadState ->
                 val isDataLoadingFromAnyResourcesAtStart =
-                    loadState.source.refresh is LoadState.Loading || loadState.mediator?.refresh is LoadState.Loading
+                    loadState.source.refresh is LoadState.Loading
+                            || loadState.source.prepend is LoadState.Loading
+                            || loadState.source.append is LoadState.Loading
+                            || loadState.mediator?.refresh is LoadState.Loading
+                            || loadState.mediator?.prepend is LoadState.Loading
+                            || loadState.mediator?.append is LoadState.Loading
 
                 val showEmptyView =
                     loadState.source.refresh is LoadState.NotLoading
