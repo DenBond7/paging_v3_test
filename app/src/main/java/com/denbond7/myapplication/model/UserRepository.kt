@@ -14,7 +14,7 @@ import com.denbond7.myapplication.database.User
  *         E-mail: DenBond7@gmail.com
  */
 object UserRepository {
-    private const val PAGE_SIZE = 20
+    private const val PAGE_SIZE = 30
 
     @OptIn(ExperimentalPagingApi::class)
     fun getUsersPager(
@@ -28,8 +28,8 @@ object UserRepository {
             ),
             pagingSourceFactory = { roomDatabase.userDao().getUsers() },
             remoteMediator = UserRemoteMediator(
-                context = context,
-                roomDatabase = roomDatabase
+                roomDatabase = roomDatabase,
+                maxSize = PAGE_SIZE
             )
         )
     }

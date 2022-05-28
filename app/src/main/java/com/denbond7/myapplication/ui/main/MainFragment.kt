@@ -1,6 +1,7 @@
 package com.denbond7.myapplication.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,22 +55,34 @@ class MainFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             pagingAdapter.loadStateFlow.collectLatest { loadState ->
+                Log.d("DDDD", "$loadState")
+                val isDataLoadingFromAnyResourcesAtStart =
+                    loadState.source.refresh is LoadState.Loading || loadState.mediator?.refresh is LoadState.Loading
+
+                val showEmptyView =
+                    loadState.source.refresh is LoadState.NotLoading
+                            && loadState.source.prepend is LoadState.NotLoading
+                            && loadState.source.append is LoadState.NotLoading && loadState.source.append.endOfPaginationReached
+                            && loadState.mediator?.refresh is LoadState.NotLoading
+                            && loadState.mediator?.prepend is LoadState.NotLoading
+                            && loadState.mediator?.append is LoadState.NotLoading && loadState.mediator?.append?.endOfPaginationReached == true
+
                 when {
-                    loadState.mediator?.refresh is LoadState.Loading && pagingAdapter.itemCount == 0 -> {
+                    isDataLoadingFromAnyResourcesAtStart && pagingAdapter.itemCount == 0 -> {
                         //showProgress()
                         binding?.progressBar?.visibility = View.VISIBLE
                         binding?.recyclerView?.visibility = View.GONE
                         binding?.textViewNoResults?.visibility = View.GONE
                     }
 
-                    loadState.refresh is LoadState.NotLoading && pagingAdapter.itemCount == 0 -> {
+                    showEmptyView && pagingAdapter.itemCount == 0 -> {
                         //showEmptyView()
                         binding?.progressBar?.visibility = View.GONE
                         binding?.recyclerView?.visibility = View.GONE
                         binding?.textViewNoResults?.visibility = View.VISIBLE
                     }
 
-                    loadState.refresh is LoadState.NotLoading && pagingAdapter.itemCount > 0 -> {
+                    pagingAdapter.itemCount > 0 -> {
                         //showContent()
                         binding?.progressBar?.visibility = View.GONE
                         binding?.recyclerView?.visibility = View.VISIBLE
