@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.denbond7.myapplication.database.AppDatabase.Companion.DB_VERSION
 
 /**
  * @author Denis Bondarenko
@@ -11,9 +12,9 @@ import androidx.room.RoomDatabase
  *         Time: 6:22 PM
  *         E-mail: DenBond7@gmail.com
  */
-@Database(entities = [ItemEntity::class], version = 1)
+@Database(entities = [User::class], version = DB_VERSION)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun itemDao(): ItemDao
+    abstract fun userDao(): UserDao
     companion object {
         const val DB_NAME = "database.db"
         const val DB_VERSION = 1

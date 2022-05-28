@@ -10,9 +10,9 @@ import androidx.room.PrimaryKey
  *         Time: 6:20 PM
  *         E-mail: DenBond7@gmail.com
  */
-@Entity
-data class ItemEntity(
-    @PrimaryKey val uid: Int,
+@Entity(tableName = "user")
+data class User(
+    @PrimaryKey(autoGenerate = true) val uid: Int? = null,
     @ColumnInfo(name = "first_name") val firstName: String?,
     @ColumnInfo(name = "last_name") val lastName: String?
 )
