@@ -3,4 +3,5 @@
     <string name="no_results">No results</string>
     <string name="reload">Reload</string>
     <string name="uid_template">UID = %1$d</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.denbond7.myapplication.R
 import com.denbond7.myapplication.database.AppDatabase
@@ -19,7 +20,12 @@ import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
     private val mainViewModel: MainViewModel by viewModels()
-    private val pagingAdapter = UserAdapter()
+    private val pagingAdapter = UserAdapter() {
+        lifecycleScope.launch {
+            val roomDatabase = AppDatabase.getDatabase(requireContext())
+            roomDatabase.userDao().deleteByUid(it)
+        }
+    }
     private var binding: FragmentMainBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +71,9 @@ class MainFragment : Fragment() {
     private fun initViews() {
         val layoutManager = LinearLayoutManager(context)
         binding?.recyclerView?.layoutManager = layoutManager
+        binding?.recyclerView?.addItemDecoration(
+            DividerItemDecoration(context, layoutManager.orientation)
+        )
         binding?.recyclerView?.adapter = pagingAdapter.withLoadStateFooter(
             ProgressLoadStateAdapter()
         )

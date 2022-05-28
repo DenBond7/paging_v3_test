@@ -16,7 +16,8 @@ import com.denbond7.myapplication.databinding.ItemUserBinding
  *         Time: 6:30 PM
  *         E-mail: DenBond7@gmail.com
  */
-class UserAdapter : PagingDataAdapter<User, UserAdapter.UserViewHolder>(UserComparator) {
+class UserAdapter(private val onDeleteListener: (uid: Int) -> Unit) :
+    PagingDataAdapter<User, UserAdapter.UserViewHolder>(UserComparator) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         return UserViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_user, parent, false)
@@ -35,6 +36,10 @@ class UserAdapter : PagingDataAdapter<User, UserAdapter.UserViewHolder>(UserComp
                 itemView.context.getString(R.string.uid_template, user?.uid ?: 0)
             binding.textViewFirstName.text = user?.firstName
             binding.textViewLastName.text = user?.lastName
+
+            binding.imageButton.setOnClickListener {
+                user?.uid?.let { uid -> onDeleteListener.invoke(uid) }
+            }
         }
     }
 
