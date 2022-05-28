@@ -29,7 +29,7 @@ object UserRepository {
             pagingSourceFactory = { roomDatabase.userDao().getUsers() },
             remoteMediator = UserRemoteMediator(
                 roomDatabase = roomDatabase,
-                maxSize = PAGE_SIZE
+                maxSize = PagingConfig.MAX_SIZE_UNBOUNDED
             )
         )
     }

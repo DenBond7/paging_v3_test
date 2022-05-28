@@ -10,6 +10,8 @@
         android:id="@+id/textViewId"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -17,23 +19,23 @@
 
     <TextView
         android:id="@+id/textViewFirstName"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        tools:text="Bob"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewId" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewId"
+        tools:text="Bob" />
 
     <TextView
         android:id="@+id/textViewLastName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        tools:text="Jonson"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewFirstName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFirstName" />
+        app:layout_constraintStart_toEndOf="@+id/textViewFirstName"
+        app:layout_constraintTop_toTopOf="@+id/textViewFirstName"
+        tools:text="Jonson" />
 </androidx.constraintlayout.widget.ConstraintLayout>
